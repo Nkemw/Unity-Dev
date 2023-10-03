@@ -1,0 +1,16 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class CameraMovement : MonoBehaviour
+{
+    [SerializeField] Transform playerPos;
+    [SerializeField] Vector3 cameraPos;
+    [SerializeField] Vector3 cameraRot;
+
+    void Update()
+    {
+        transform.position = playerPos.position + cameraPos;
+        transform.rotation = Quaternion.Euler(cameraRot);
+    }
+}
