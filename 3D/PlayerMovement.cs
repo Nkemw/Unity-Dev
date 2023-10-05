@@ -7,22 +7,44 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float moveSpeed;
 
     [SerializeField] float mouseSensivity = 20f;
+
+    private Vector3 rotateVector;
+    public Vector3 RotateVector { get; set; }
+
+    private void Start()
+    {
+        RotateVector = transform.forward;
+    }
     private void FixedUpdate()
     {
+        PlayerMove();
+
+        RotateVectorUpdate();
+
+        PlayerRotate();
+    }
+
+    void PlayerMove()
+    {
+
         float verticalMovement = Input.GetAxis("Vertical");
         float horizontalMovement = Input.GetAxis("Horizontal");
 
-        transform.position += (transform.forward * verticalMovement + transform.right * horizontalMovement) * Time.deltaTime * moveSpeed;
+        Vector3 verticalVector = new Vector3(transform.forward.x, 0f, transform.forward.z) * verticalMovement;
+        Vector3 horizontalVector = new Vector3(transform.right.x, 0f, transform.right.z) * horizontalMovement;
 
+        transform.position += (verticalVector + horizontalVector) * Time.deltaTime * moveSpeed;
+    }
+
+    void RotateVectorUpdate()
+    {
         float mouseX = Input.GetAxis("Mouse X");
         float mouseY = Input.GetAxis("Mouse Y");
 
-        //
-        //mouseX = Mathf.Clamp(mouseX, -90f, 90f);
-
-        //transform.Rotate(new Vector3(MouseY* mouseSensivity, MouseX* mouseSensivity, 0));
-        Vector3 currentRotation = transform.rotation.eulerAngles;
-        // 마우스 입력에 따라 Y축 회전
-        transform.rotation = Quaternion.Euler(currentRotation.x - mouseY * mouseSensivity, currentRotation.y + mouseX * mouseSensivity, 0);
+        RotateVector = new Vector3(RotateVector.x - mouseY * mouseSensivity, RotateVector.y + mouseX * mouseSensivity, 0);
+    }
+    void PlayerRotate()
+    {
+        transform.rotation = Quaternion.Euler(0f, RotateVector.y, 0f);
     }
 }

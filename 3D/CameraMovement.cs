@@ -8,6 +8,9 @@ public class CameraMovement : MonoBehaviour
     [SerializeField] Vector3 cameraPos;
     [SerializeField] Vector3 cameraRot;
 
+    private Vector3 offset;
+
+    [SerializeField] PlayerMovement player;
     private void Start()
     {
         transform.rotation = Quaternion.Euler(cameraRot);
@@ -16,13 +19,17 @@ public class CameraMovement : MonoBehaviour
     }
     void Update()
     {
-        transform.position = playerPos.position + cameraPos;
-
-        transform.position = playerPos.position + -playerPos.forward * offset.magnitude;
-
-        transform.LookAt(playerPos);
+        CameraRotate();
+        CameraMove();
     }
 
-    private Vector3 offset; // 카메라와 플레이어 간의 상대 위치
+    void CameraMove()
+    {
+        transform.position = playerPos.position - transform.forward * offset.magnitude;
+    }
 
+    void CameraRotate()
+    {
+        transform.rotation = Quaternion.Euler(player.RotateVector);
+    }
 }
