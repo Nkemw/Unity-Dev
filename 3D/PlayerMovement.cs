@@ -11,6 +11,8 @@ public class PlayerMovement : MonoBehaviour
     private Vector3 rotateVector;
     public Vector3 RotateVector { get; set; }
 
+    [SerializeField] float rotateLimitX = 85f;
+
     private void Start()
     {
         RotateVector = transform.forward;
@@ -41,7 +43,8 @@ public class PlayerMovement : MonoBehaviour
         float mouseX = Input.GetAxis("Mouse X");
         float mouseY = Input.GetAxis("Mouse Y");
 
-        RotateVector = new Vector3(RotateVector.x - mouseY * mouseSensivity, RotateVector.y + mouseX * mouseSensivity, 0);
+        RotateVector = new Vector3(Mathf.Clamp(RotateVector.x - mouseY * mouseSensivity, -rotateLimitX, rotateLimitX), RotateVector.y + mouseX * mouseSensivity, 0);
+        //RotateVector = new Vector3(RotateVector.x - mouseY * mouseSensivity, RotateVector.y + mouseX * mouseSensivity, 0);
     }
     void PlayerRotate()
     {

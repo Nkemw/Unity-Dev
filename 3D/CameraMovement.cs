@@ -11,13 +11,15 @@ public class CameraMovement : MonoBehaviour
     private Vector3 offset;
 
     [SerializeField] PlayerMovement player;
+
+    [SerializeField] float softness = 0.4f;
     private void Start()
     {
         transform.rotation = Quaternion.Euler(cameraRot);
 
         offset = transform.position - playerPos.position;
     }
-    void Update()
+    void FixedUpdate()
     {
         CameraRotate();
         CameraMove();
@@ -25,11 +27,12 @@ public class CameraMovement : MonoBehaviour
 
     void CameraMove()
     {
-        transform.position = playerPos.position - transform.forward * offset.magnitude;
+        Vector3 targetPosition = playerPos.position - transform.forward * offset.magnitude;
+        transform.position = Vector3.Slerp(transform.position, targetPosition, softness);
     }
 
     void CameraRotate()
     {
-        transform.rotation = Quaternion.Euler(player.RotateVector);
+        transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(player.RotateVector), softness);
     }
 }
