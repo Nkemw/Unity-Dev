@@ -28,9 +28,21 @@ public class CameraMovement : MonoBehaviour
     void CameraMove()
     {
         Vector3 targetPosition = playerPos.position - transform.forward * offset.magnitude;
-        transform.position = Vector3.Slerp(transform.position, targetPosition, softness);
+        
+        RaycastHit hit;
+        if (Physics.Raycast(playerPos.position, -transform.forward, out hit, offset.magnitude))
+        {
+            transform.position = Vector3.Slerp(transform.position, hit.point, softness);
+            /*transform.position = hit.point;
+            Debug.Log("hit");*/
+        }
+        else
+        {
+            transform.position = Vector3.Slerp(transform.position, targetPosition, softness);
+        }
     }
 
+    
     void CameraRotate()
     {
         transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(player.RotateVector), softness);
