@@ -1,0 +1,1 @@
+카메라 Clipping Planes 속성과 벽 오브젝트 Collider Size 값을 변경함으로써 카메라 렌더링 개선
