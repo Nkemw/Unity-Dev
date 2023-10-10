@@ -13,28 +13,36 @@ public class CameraMovement : MonoBehaviour
     [SerializeField] PlayerMovement player;
 
     [SerializeField] float softness = 0.4f;
+
+    //int layerMask;
     private void Start()
     {
         transform.rotation = Quaternion.Euler(cameraRot);
 
         offset = transform.position - playerPos.position;
+
+        //layerMask = 1 << LayerMask.NameToLayer("Raycastable");        
     }
     void FixedUpdate()
     {
+        
         CameraRotate();
         CameraMove();
+        
     }
 
+    
     void CameraMove()
     {
         Vector3 targetPosition = playerPos.position - transform.forward * offset.magnitude;
         
         RaycastHit hit;
-        if (Physics.Raycast(playerPos.position, -transform.forward, out hit, offset.magnitude))
+
+        int layerMask = 1 << LayerMask.NameToLayer("Raycastable");
+
+        if (Physics.Raycast(playerPos.position, -transform.forward, out hit, offset.magnitude, layerMask))
         {
             transform.position = Vector3.Slerp(transform.position, hit.point, softness);
-            /*transform.position = hit.point;
-            Debug.Log("hit");*/
         }
         else
         {
