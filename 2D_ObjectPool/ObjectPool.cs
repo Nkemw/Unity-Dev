@@ -10,9 +10,10 @@ public class ObjectPool : MonoBehaviour
 
     [SerializeField] GameObject bullet;
 
-    [SerializeField] int maxBulletCount;
+    [SerializeField] int initBulletCount;
 
-    // Start is called before the first frame update
+    private int objectCount = 0;
+
     void Start()
     {
         if(instance == null)
@@ -28,20 +29,20 @@ public class ObjectPool : MonoBehaviour
 
     void InitBullet()
     {
-        for(int i = 0; i < maxBulletCount; i++)
+        for(int i = 0; i < initBulletCount; i++)
         {
             CreateBullet();
         }
     }
     public GameObject TakeBullet()
     {
-        //Debug.Log(bulletCount);
-        /*if(bulletQueue.Count == 0)
+        Debug.Log(objectCount);
+        if(bulletQueue.Count == 0)
         {
             CreateBullet();
-        }*/
-
-        if (bulletQueue.Count != 0)
+        }
+        
+        if(bulletQueue.Count != 0)
         {
             GameObject takeBullet = bulletQueue.Dequeue();
             takeBullet.SetActive(true);
@@ -53,14 +54,14 @@ public class ObjectPool : MonoBehaviour
 
     public void CreateBullet()
     {
-        GameObject createdBullet = Instantiate(bullet);
-        bulletQueue.Enqueue(createdBullet);
-        //bulletCount++;
+         GameObject createdBullet = Instantiate(bullet);
+         bulletQueue.Enqueue(createdBullet);
+         objectCount++;
+        
     }
 
     public void ReturnBullet(GameObject bullet)
     {
-        Debug.Log("Return");
         bullet.SetActive(false);
         bulletQueue.Enqueue(bullet);
     }
