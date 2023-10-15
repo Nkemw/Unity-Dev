@@ -1,6 +1,15 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
+enum ColorType
+{
+    Red,
+    Green,
+    Blue,
+    Black
+}
 
 public class ObjectPool : MonoBehaviour
 {
@@ -33,7 +42,7 @@ public class ObjectPool : MonoBehaviour
         {
             CreateBullet();
         }
-    }
+    }   
     public GameObject TakeBullet()
     {
         Debug.Log(objectCount);
@@ -46,6 +55,9 @@ public class ObjectPool : MonoBehaviour
         {
             GameObject takeBullet = bulletQueue.Dequeue();
             takeBullet.SetActive(true);
+
+            InitBulletColor(takeBullet);
+
             return takeBullet;
         }
 
@@ -66,4 +78,30 @@ public class ObjectPool : MonoBehaviour
         bulletQueue.Enqueue(bullet);
     }
     
+    private void InitBulletColor(GameObject obj)
+    {
+        ColorType[] colorTypes = (ColorType[])Enum.GetValues(typeof(ColorType));
+        int colorTypeCount = colorTypes.Length;
+
+        int ranValue = UnityEngine.Random.Range(0, colorTypeCount);
+
+        switch (ranValue)
+        {
+            case (int) ColorType.Red:
+                obj.GetComponent<SpriteRenderer>().color = Color.red;
+                break;
+
+            case (int)ColorType.Green:
+                obj.GetComponent<SpriteRenderer>().color = Color.green;
+                break;
+
+            case (int)ColorType.Blue:
+                obj.GetComponent<SpriteRenderer>().color = Color.blue;
+                break;
+
+            case (int)ColorType.Black:
+                obj.GetComponent<SpriteRenderer>().color = Color.black;
+                break;
+        }
+    }
 }
